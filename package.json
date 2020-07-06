@@ -1,0 +1,33 @@
+{
+  "name": "dvf-celebrity-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app/server.js",
+  "scripts": {
+    "start": "node app/server",
+    "server": "nodemon --ignore db.json server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DeversiFi/dvf-celebrity-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DeversiFi/dvf-celebrity-api/issues"
+  },
+  "homepage": "https://github.com/DeversiFi/dvf-celebrity-api#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "dotenv": "^8.2.0",
+    "dvf-client-js": "^1.0.1",
+    "express": "^4.17.1",
+    "lowdb": "^1.0.0",
+    "moment": "^2.27.0",
+    "node-cron": "^2.0.3",
+    "sentiment": "^5.0.2",
+    "truffle-hdwallet-provider": "^1.0.17",
+    "twit": "^2.2.11",
+    "web3": "^1.2.9"
+  }
+}
