@@ -3,7 +3,9 @@ const updateRanking = async (celebs, ranking) => {
     .map(({ userId, userScore, picture, name, account, balance }) => {
       const oldRanking = ranking.find((rank) => rank.userId === userId);
       const positivePercent =
-        (userScore.positiveTweets * 100) / userScore.totalTweets;
+        userScore.totalTweets > 0
+          ? (userScore.positiveTweets * 100) / userScore.totalTweets
+          : 0;
       const returnsPercent =
         ((balance.currentBalanceTotal - balance.initialBalance) * 100) /
         balance.initialBalance;
@@ -21,9 +23,13 @@ const updateRanking = async (celebs, ranking) => {
         returnsPercent,
         currentBalanceTotal: balance.currentBalanceTotal,
         ...(oldRanking && {
-          change24hrs: oldRanking.change24hrs,
-          rank24hrs: oldRanking.rank24hrs,
-          historicalBalance: oldRanking.historicalBalance
+          ...(oldRanking.change24hrs && {
+            change24hrs: oldRanking.change24hrs,
+          }),
+          ...(oldRanking.rank24hrs && { rank24hrs: oldRanking.rank24hrs }),
+          ...(oldRanking.historicalBalance && {
+            historicalBalance: oldRanking.historicalBalance,
+          }),
         }),
       };
     })

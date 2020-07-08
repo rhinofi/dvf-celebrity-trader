@@ -1,4 +1,4 @@
-const firebaseInstance = require("./firebaseInstance");
+const { writeDatabase, readDatabase } = require("./firebaseDatabase");
 
 const createNewCelebrity = async (req, res) => {
   const { twitterLink, address } = req.body;
@@ -10,7 +10,8 @@ const createNewCelebrity = async (req, res) => {
     return res.status(400).send(errorMessage);
   }
 
-  const celebrities = await firebaseInstance.get("/celebrities.json").then(res => res.data);
+  const celebrities = await readDatabase("/celebrities");
+
   const celebrityExist = celebrities.find(
     (celeb) => celeb.twitterLink === twitterLink
   );
@@ -18,7 +19,7 @@ const createNewCelebrity = async (req, res) => {
   if (celebrityExist) {
     return res.status(400).send("Celebrity Already Exists.");
   }
-  await firebaseInstance.put("/celebrities.json", [
+  await writeDatabase("/celebrities", [
     { twitterLink, address },
     ...celebrities,
   ]);
@@ -27,4 +28,3 @@ const createNewCelebrity = async (req, res) => {
 };
 
 module.exports = createNewCelebrity;
-

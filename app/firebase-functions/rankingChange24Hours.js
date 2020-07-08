@@ -1,14 +1,12 @@
-const firebaseInstance = require("./firebaseInstance");
 const updateRankingChange24Hours = require("../src/functions/ranking/updateRankingChange24Hours");
+const { writeDatabase, readDatabase } = require("./firebaseDatabase");
 
 const rankingChange24Hours = async () => {
-  const ranking = await firebaseInstance
-    .get("/ranking.json")
-    .then(({ data }) => data);
+  const ranking = await readDatabase("/ranking");
 
   const rankingUpdated = await updateRankingChange24Hours(ranking);
 
-  await firebaseInstance.put("/ranking.json", [...rankingUpdated]);
+  await writeDatabase("/ranking", [...rankingUpdated]);
 
   console.log("24 Hours Changes Updated");
   return;
