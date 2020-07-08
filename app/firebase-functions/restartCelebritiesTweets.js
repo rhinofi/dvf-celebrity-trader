@@ -1,14 +1,9 @@
-const firebaseInstance = require("./firebaseInstance");
 const restartCelebritiesRankAndStartDate = require("../src/functions/celebrities/restartCelebritiesRankAndStartDate");
+const { writeDatabase, readDatabase } = require("./firebaseDatabase");
 
 const restartCelebritiesTweets = async (req, res) => {
-  const celebrities = await firebaseInstance
-    .get("/celebrities.json")
-    .then((res) => res.data.filter((value) => !!value));
-
-  const config = await firebaseInstance
-    .get("/config.json")
-    .then(({ data }) => data);
+  const celebrities = (await readDatabase("/celebrities")) || [];
+  const config = await readDatabase("/config");
 
   const {
     restartedCelebrities,
@@ -17,9 +12,9 @@ const restartCelebritiesTweets = async (req, res) => {
   } = await restartCelebritiesRankAndStartDate(celebrities);
   console.log("startDate", startDate);
 
-  await firebaseInstance.put("/ranking.json", [...ranking]);
-  await firebaseInstance.put("/celebrities.json", [...restartedCelebrities]);
-  await firebaseInstance.put("/config.json", { ...config, startDate });
+  await writeDatabase("/ranking", [...ranking]);
+  await writeDatabase("/celebrities", [...restartedCelebrities]);
+  await writeDatabase("/config", { ...config, startDate });
 
   return res.send("Celebrities Restarted and Ranking deleted");
 };

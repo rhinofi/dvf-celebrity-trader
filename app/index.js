@@ -1,3 +1,4 @@
+require("dotenv").config();
 const functions = require("firebase-functions");
 const createInitialFirebase = require("./firebase-functions/createInitialFirebase");
 const createNewCelebrity = require("./firebase-functions/createNewCelebrity");
@@ -19,7 +20,7 @@ exports.restartCelebritiesTweets = functions
 
 exports.getCelebritiesTweets = functions
   .runWith({ memory: "2GB", timeoutSeconds: 540 })
-  .pubsub.schedule("every 30 minutes")
+  .pubsub.schedule("every 5 minutes")
   .onRun(getCelebritiesTweets);
 
 exports.rankingChange24Hours = functions

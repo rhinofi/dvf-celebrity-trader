@@ -1,7 +1,6 @@
 const moment = require("moment");
 const Sentiment = require("sentiment");
-
-const firebaseInstance = require("./firebaseInstance");
+const { writeDatabase, readDatabase } = require("./firebaseDatabase");
 const celebritiesNewTweetsFinder = require("../src/functions/celebritiesTweets/celebritiesNewTweetsFinder");
 const updateRanking = require("../src/functions/ranking/updateRanking");
 const {
@@ -14,24 +13,20 @@ const formatTweetDate = require("../src/functions/celebritiesTweets/formatTweetD
 const sentiment = new Sentiment();
 
 const getCelebritiesTweets = async () => {
-  const celebrities = await firebaseInstance
-    .get("/celebrities.json")
-    .then((res) => res.data.filter((value) => !!value));
+  const celebrities = await readDatabase("/celebrities");
 
-  const config = await firebaseInstance
-    .get("/config.json")
-    .then(({ data }) => data);
+  const config = await readDatabase("/config");
 
   if (!config.startDate) {
     const now = moment().unix();
     config.startDate = now;
-    await firebaseInstance.put("/config.json", { ...config });
+    await writeDatabase("/config", { ...config });
   }
 
   const { tradeURL, startDate } = config;
 
   const celebritiesWithTweets = await celebritiesNewTweetsFinder({
-    celebrities,
+    celebrities: celebrities.filter((value) => !!value),
     startDate,
   });
 
@@ -83,8 +78,8 @@ const getCelebritiesTweets = async () => {
         screen_name: user.screen_name,
         sentiment: tweetSentiment,
         tradeCompleted,
-        tradeResponse,
-        tradeError,
+        ...(tradeResponse && { tradeResponse }),
+        ...(tradeError && { tradeError }),
       });
     }
 
@@ -92,7 +87,6 @@ const getCelebritiesTweets = async () => {
       ...celebrity,
       balance,
       userScore,
-      newTweets,
       ...(userTweetsFormatedAndTraded &&
         userTweetsFormatedAndTraded.length && {
           lastUpdatedTweet: userTweetsFormatedAndTraded[0].id,
@@ -104,14 +98,11 @@ const getCelebritiesTweets = async () => {
     });
   }
 
-  const ranking = await firebaseInstance
-    .get("/ranking.json")
-    .then((res) => res.data || []);
-
+  const ranking = (await readDatabase("/ranking")) || [];
   const rankingUpdated = await updateRanking(celebritiesTraded, ranking);
 
-  await firebaseInstance.put("/celebrities.json", [...celebritiesTraded]);
-  await firebaseInstance.put("/ranking.json", [...rankingUpdated]);
+  await writeDatabase("/celebrities", [...celebritiesTraded]);
+  await writeDatabase("/ranking", [...rankingUpdated]);
 
   console.log("Celebrities Tweets Updated");
   return;

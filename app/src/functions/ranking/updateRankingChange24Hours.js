@@ -9,8 +9,8 @@ const updateRankingChange24Hours = (ranking) => {
         ...rank.historicalBalance,
         [today]: rank.currentBalanceTotal,
       },
-      rank24hrs: rank.rank,
-      change24hrs: rank.returnsPercent,
+      ...(rank.rank && { rank24hrs: rank.rank }),
+      ...(rank.returnsPercent && { change24hrs: rank.returnsPercent }),
     };
   });
 };

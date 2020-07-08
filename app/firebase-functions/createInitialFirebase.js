@@ -1,10 +1,13 @@
-const firebaseInstance = require("./firebaseInstance");
 const initialCelebrities = require("./initialCelebrities");
 const getCelebrityTwitterInfo = require("../src/functions/celebrities/getCelebrityTwitterInfo");
+const { writeDatabase } = require("./firebaseDatabase");
 
 const createInitialFirebase = async (req, res) => {
+  const { celebrities } = req.body;
+  const celebritiesToMap = celebrities || initialCelebrities || [];
+
   const celebritiesUpdated = await Promise.all(
-    initialCelebrities.map(async (celebrity) => {
+    celebritiesToMap.map(async (celebrity) => {
       const account = celebrity.twitterLink.split(".com/")[1];
       const [err, celeb] = await getCelebrityTwitterInfo(account);
 
@@ -35,8 +38,8 @@ const createInitialFirebase = async (req, res) => {
     })
   );
 
-  await firebaseInstance.put("/celebrities.json", celebritiesUpdated);
-  await firebaseInstance.put("/ranking.json", ranking);
+  await writeDatabase("/celebrities", celebritiesUpdated);
+  await writeDatabase("/ranking", ranking);
 
   return res.send("Celebrities Created");
 };
