@@ -69,6 +69,8 @@ const getCelebritiesTweets = async () => {
 
       if (!tradeError && tradeCompleted && tradeResponse) {
         balance.currentBalanceTotal = tradeResponse.currentBalance.total;
+        balance.balanceETH = tradeResponse.currentBalance.eth;
+        balance.balanceUSDT = tradeResponse.currentBalance.usdt;
       }
 
       userTweetsFormatedAndTraded.push({

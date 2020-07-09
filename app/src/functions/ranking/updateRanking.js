@@ -22,6 +22,8 @@ const updateRanking = async (celebs, ranking) => {
         positivePercent,
         returnsPercent,
         currentBalanceTotal: balance.currentBalanceTotal,
+        ...(balance.balanceETH && { balanceETH: balance.balanceETH }),
+        ...(balance.balanceUSDT && { balanceUSDT: balance.balanceUSDT }),
         ...(oldRanking && {
           ...(oldRanking.change24hrs && {
             change24hrs: oldRanking.change24hrs,
