@@ -17,7 +17,7 @@ const createInitialFirebase = async (req, res) => {
         ...(celeb && { userId: celeb.id_str }),
         ...(celeb && { name: celeb.name }),
         ...(celeb && { followers: celeb.followers_count }),
-        ...(celeb && { picture: celeb.profile_image_url }),
+        ...(celeb && { picture: celeb.profile_image_url.replace('http://', 'https://') }),
         lastUpdatedTweet: null,
       };
     })
