@@ -17,7 +17,7 @@ const celebritiesNewTweetsFinder = async ({ celebrities, startDate }) => {
       celebrity.userId = id_str;
       celebrity.name = name;
       celebrity.followers = followers_count;
-      celebrity.picture = profile_image_url;
+      celebrity.picture = profile_image_url.replace('http://', 'https://');
       celebrity.account = account;
     }
     console.log("Starting scan for", celebrity.name);
