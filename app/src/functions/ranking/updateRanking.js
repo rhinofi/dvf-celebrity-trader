@@ -1,6 +1,6 @@
 const updateRanking = async (celebs, ranking) => {
-  const rankingUpdated = celebs
-    .map(({ userId, userScore, picture, name, account, balance }) => {
+  const rankingUpdated = celebs.map(
+    ({ userId, userScore, picture, name, account, balance, tweets }) => {
       const oldRanking = ranking.find((rank) => rank.userId === userId);
       const positivePercent =
         userScore.totalTweets > 0
@@ -21,7 +21,13 @@ const updateRanking = async (celebs, ranking) => {
         tweetsAmount: userScore.totalTweets,
         positivePercent,
         returnsPercent,
+        ...(tweets &&
+          tweets.length && {
+            ...(tweets[0].text && { lastTweet: tweets[0].text }),
+            ...(tweets[0].tweetId && { tweetId: tweets[0].tweetId }),
+          }),
         currentBalanceTotal: balance.currentBalanceTotal,
+        ...(balance.lastAction && { lastAction: balance.lastAction }),
         ...(balance.balanceETH && { balanceETH: balance.balanceETH }),
         ...(balance.balanceUSDT && { balanceUSDT: balance.balanceUSDT }),
         ...(oldRanking && {
@@ -34,23 +40,18 @@ const updateRanking = async (celebs, ranking) => {
           }),
         }),
       };
-    })
-    .sort((first, second) => {
-      return first.returnsPercent > second.returnsPercent
-        ? -1
-        : first.returnsPercent < second.returnsPercent
-        ? 1
-        : first.tweetsAmount > second.tweetsAmount
-        ? -1
-        : first.tweetsAmount < second.tweetsAmount
-        ? 1
-        : 0;
-    });
+    }
+  );
 
-  return rankingUpdated.map((rank, i) => ({
-    ...rank,
-    rank: i + 1,
-  }));
+  return rankingUpdated
+    .sort(
+      (a, b) =>
+        b.returnsPercent - a.returnsPercent || b.tweetsAmount - a.tweetsAmount
+    )
+    .map((rank, i) => ({
+      ...rank,
+      rank: i + 1,
+    }));
 };
 
 module.exports = updateRanking;

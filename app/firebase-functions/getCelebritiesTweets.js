@@ -71,17 +71,20 @@ const getCelebritiesTweets = async () => {
         balance.currentBalanceTotal = tradeResponse.currentBalance.total;
         balance.balanceETH = tradeResponse.currentBalance.eth;
         balance.balanceUSDT = tradeResponse.currentBalance.usdt;
+        balance.lastAction =
+          sentimentType === positiveTweets ? "bought" : "sold";
       }
 
       userTweetsFormatedAndTraded.push({
         created_at: formatTweetDate(created_at),
         id,
+        tweetId: tweet.id_str,
         text,
         screen_name: user.screen_name,
         sentiment: tweetSentiment,
         tradeCompleted,
         ...(tradeResponse && { tradeResponse }),
-        ...(tradeError && { tradeError }),
+        ...(tradeError && { tradeError })
       });
     }
 
