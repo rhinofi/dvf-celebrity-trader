@@ -6,6 +6,15 @@ DeversiFi Celebrity Trader provides a backend that scan a list of accounts from 
 
 **The UI is live at https://www.deversifi.com/celebrity-trader**
 
+## Building a trading bot with DeversiFi
+
+This repository contains an example of a trading bot built for DeversiFi that trades based on twitter sentiment. In addition to the examples here, the following resources are useful to anyone wishing to build an integration with DeversiFi:
+
+- [API documentation](https://docs.deversifi.com/)
+- [Javascript reference client library](https://github.com/deversifi/dvf-client-js)
+- DeversiFi also has a mirror environment running on the Ethereum ropsten test network allowing for testing without risking real funds.
+
+
 ## Express Server
  To install all packages and dependencies run:
 
