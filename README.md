@@ -4,6 +4,8 @@ DeversiFi Celebrity Trader provides a backend that scan a list of accounts from 
 
 **Note:** The /app folder is divided in two parts, the code necessary to run the app with express server and the code to run with [Firebase Cloud Functions](https://firebase.google.com/docs/functions) .
 
+**The UI is live at https://www.deversifi.com/celebrity-trader**
+
 ## Express Server
  To install all packages and dependencies run:
 
