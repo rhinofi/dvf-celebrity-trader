@@ -23,7 +23,7 @@
     "dvf-client-js": "^1.0.1",
     "express": "^4.17.1",
     "lowdb": "^1.0.0",
-    "moment": "^2.27.0",
+    "moment": "^2.29.2",
     "node-cron": "^2.0.3",
     "sentiment": "^5.0.2",
     "truffle-hdwallet-provider": "^1.0.17",
