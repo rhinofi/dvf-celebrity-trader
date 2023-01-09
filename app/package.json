@@ -14,7 +14,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "firebase": "^7.15.5",
-    "firebase-admin": "^8.10.0",
+    "firebase-admin": "^11.4.1",
     "firebase-functions": "^3.6.1",
     "moment": "^2.27.0",
     "sentiment": "^5.0.2",
